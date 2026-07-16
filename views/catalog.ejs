@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('partials/head') %>
+</head>
+<body>
+    <div class="page-wrapper">
+        <%- include('partials/navbar') %>
+
+        <section class="catalog-hero">
+            <div class="container text-center">
+                <h1 class="catalog-title">Catálogo</h1>
+                <p class="catalog-subtitle">Explora todos nuestros productos de cuidado personal.</p>
+            </div>
+        </section>
+
+        <section class="catalog-section">
+            <div class="container">
+                <div class="category-pills d-flex flex-wrap justify-content-center gap-2 mb-5">
+                    <a href="/catalogo" class="nav-link <%= !currentCategory ? 'active' : '' %>">Todos</a>
+                    <% categories.forEach(function(cat) { %>
+                    <a href="/catalogo?category=<%= encodeURIComponent(cat.name) %>" class="nav-link <%= currentCategory === cat.name ? 'active' : '' %>"><%= cat.name %></a>
+                    <% }); %>
+                </div>
+
+                <div class="row g-4">
+                    <% products.forEach(function(product) { %>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="product-card card-carely h-100">
+                            <div class="product-image-wrapper">
+                                <% if (product.image) { %>
+                                <img src="<%= product.image %>" alt="<%= product.name %>" class="product-image">
+                                <% } else { %>
+                                <div class="product-image-placeholder">
+                                    <i class="bi bi-box"></i>
+                                </div>
+                                <% } %>
+                                <% if (product.featured) { %>
+                                <span class="product-badge">Destacado</span>
+                                <% } %>
+                            </div>
+                            <div class="product-info">
+                                <span class="product-category"><%= product.category.name %></span>
+                                <h3 class="product-name"><%= product.name %></h3>
+                                <% if (product.description) { %>
+                                <p class="product-description"><%= product.description.substring(0, 80) %></p>
+                                <% } %>
+                                <div class="product-footer">
+                                    <span class="product-price">$<%= product.price.toFixed(2) %></span>
+                                    <% if (product.stock > 0) { %>
+                                    <span class="product-stock in-stock">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        En stock
+                                    </span>
+                                    <% } else { %>
+                                    <span class="product-stock out-of-stock">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                        Agotado
+                                    </span>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+
+                <% if (products.length === 0) { %>
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 3rem; color: var(--color-text-secondary);"></i>
+                    <p class="mt-3" style="color: var(--color-text-secondary);">No se encontraron productos.</p>
+                </div>
+                <% } %>
+            </div>
+        </section>
+
+        <%- include('partials/footer') %>
+    </div>
+
+    <%- include('partials/scripts') %>
+</body>
+</html>
