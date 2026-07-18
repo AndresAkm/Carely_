@@ -1,5 +1,5 @@
-const Category = require('../models/Category');
-const Product = require('../models/Product');
+import Category from '../models/Category.js';
+import Product from '../models/Product.js';
 
 const benefits = [
   {
@@ -42,7 +42,7 @@ const whyUs = [
   }
 ];
 
-exports.getLanding = async (req, res) => {
+export const getLanding = async (req, res) => {
   try {
     const categories = await Category.find({ isActive: true }).sort('order');
     const featuredProducts = await Product.find({ isActive: true, featured: true })
@@ -62,7 +62,7 @@ exports.getLanding = async (req, res) => {
   }
 };
 
-exports.getCatalog = async (req, res) => {
+export const getCatalog = async (req, res) => {
   try {
     const categories = await Category.find({ isActive: true }).sort('order');
     const currentCategory = req.query.category || '';

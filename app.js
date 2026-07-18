@@ -1,8 +1,12 @@
-require('dotenv').config();
-const express = require('express');
-const path = require('path');
-const connectDB = require('./config/db');
-const landingRoutes = require('./routes/landingRoutes');
+import 'dotenv/config';
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import connectDB from './config/db.js';
+import landingRoutes from './routes/landingRoutes.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 

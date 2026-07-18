@@ -1,8 +1,9 @@
-const express = require('express');
+import express from 'express';
+import { getLanding, getCatalog } from '../controllers/landingController.js';
+
 const router = express.Router();
-const { getLanding, getCatalog } = require('../controllers/landingController');
 
 router.get('/', getLanding);
 router.get('/catalogo', getCatalog);
 
-module.exports = router;
+export default router;

@@ -2,16 +2,19 @@
   "name": "carely-node",
   "version": "1.0.0",
   "description": "Carely - Tienda de cuidado personal (Node.js + Express + EJS)",
+  "type": "module",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "node --watch app.js",
-    "seed": "node seeds/seed.js"
+    "dev": "nodemon app.js"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "mongoose": "^8.9.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }
