@@ -33,7 +33,7 @@ export const whyUs = [
     description: 'Disfruta de una experiencia de compra diseñada pensando en ti, desde la navegación hasta la entrega.',
   },
   {
-    icon: 'bi-leaf',
+    icon: 'bi-bandaid',
     title: 'Compromiso con la Calidad',
     description: 'Nos asociamos con marcas que comparten nuestro compromiso con la calidad y la sostenibilidad.',
   },
