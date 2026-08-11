@@ -9,6 +9,6 @@ const productSchema = new mongoose.Schema({
   stock: { type: Number, default: 0 },
   isActive: { type: Boolean, default: true },
   featured: { type: Boolean, default: false }
-}, { timestamps: true });
+}, { timestamps: true, versionKey: false });
 
 export default mongoose.model('Product', productSchema);
