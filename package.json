@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Carely - Tienda de cuidado personal (Node.js + Express + EJS)",
   "type": "module",
-  "main": "app.js",
+  "main": "src/server.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"

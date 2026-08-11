@@ -1,0 +1,8 @@
+@import 'variables.css';
+@import 'base.css';
+@import 'layout.css';
+@import 'animations.css';
+@import 'theme.css';
+@import 'home.css';
+@import 'catalog.css';
+@import 'auth.css';

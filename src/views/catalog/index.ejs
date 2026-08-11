@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('../partials/head') %>
+    <link href="/css/catalog.css" rel="stylesheet">
+</head>
+<body>
+    <div class="page-wrapper">
+        <%- include('../partials/navbar', { currentPath: '/catalogo' }) %>
+
+        <section class="catalog-hero">
+            <div class="container text-center">
+                <h1 class="catalog-title">Catalogo</h1>
+                <p class="catalog-subtitle">Explora todos nuestros productos de cuidado personal.</p>
+            </div>
+        </section>
+
+        <section class="catalog-section">
+            <div class="container">
+                <div class="category-pills d-flex flex-wrap justify-content-center gap-2 mb-5">
+                    <a href="/catalogo" class="nav-link <%= !currentCategory ? 'active' : '' %>">Todos</a>
+                    <% categories.forEach(function(cat) { %>
+                    <a href="/catalogo?category=<%= encodeURIComponent(cat.name) %>" class="nav-link <%= currentCategory === cat.name ? 'active' : '' %>"><%= cat.name %></a>
+                    <% }); %>
+                </div>
+
+                <div class="products-grid">
+                    <% products.forEach(function(product) { %>
+                    <div class="product-card anim-scroll">
+                        <div class="product-card__img-wrap">
+                            <% if (product.image) { %>
+                            <img src="<%= product.image %>" alt="<%= product.name %>" class="product-card__img">
+                            <% } else { %>
+                            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+                                <div class="product-image-placeholder">
+                                    <i class="bi bi-box"></i>
+                                </div>
+                            </div>
+                            <% } %>
+                            <% if (product.featured) { %>
+                            <span class="product-card__badge">Destacado</span>
+                            <% } %>
+                        </div>
+                        <div class="product-card__body">
+                            <span class="product-card__cat"><%= product.category ? product.category.name : '' %></span>
+                            <h3 class="product-card__name"><%= product.name %></h3>
+                            <% if (product.description) { %>
+                            <p class="product-card__desc"><%= product.description.substring(0, 80) %><% if (product.description.length > 80) { %>...<% } %></p>
+                            <% } %>
+                            <div class="product-card__footer">
+                                <span class="product-card__price">$<%= typeof product.price === 'number' ? product.price.toFixed(2) : parseFloat(product.price).toFixed(2) %></span>
+                                <% if (product.stock > 0) { %>
+                                <span class="product-card__stock in-stock">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    En stock
+                                </span>
+                                <% } else { %>
+                                <span class="product-card__stock out-of-stock">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                    Agotado
+                                </span>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
+
+                <% if (products.length === 0) { %>
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 3rem; color: var(--color-text-secondary);"></i>
+                    <p class="mt-3" style="color: var(--color-text-secondary);">No se encontraron productos.</p>
+                </div>
+                <% } %>
+            </div>
+        </section>
+
+        <%- include('../partials/footer') %>
+    </div>
+
+    <%- include('../partials/scripts') %>
+</body>
+</html>
