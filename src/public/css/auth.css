@@ -2,6 +2,35 @@
 .auth-page {
     background: linear-gradient(135deg, #FFF5F9 0%, #F0F6FF 50%, #FFF5F9 100%);
     min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-page::before,
+.auth-page::after {
+    content: '';
+    position: fixed;
+    z-index: 0;
+    width: 34rem;
+    height: 34rem;
+    border-radius: 42% 58% 65% 35% / 47% 38% 62% 53%;
+    filter: blur(2px);
+    opacity: .65;
+    pointer-events: none;
+}
+
+.auth-page::before {
+    top: -15rem;
+    left: -10rem;
+    background: radial-gradient(circle at 60% 60%, rgba(232, 96, 155, .28), rgba(232, 96, 155, 0));
+    transform: rotate(25deg);
+}
+
+.auth-page::after {
+    right: -12rem;
+    bottom: -16rem;
+    background: radial-gradient(circle at 35% 35%, rgba(91, 141, 239, .3), rgba(91, 141, 239, 0));
+    transform: rotate(-20deg);
 }
 
 .auth-page .page-wrapper {
@@ -16,6 +45,8 @@
     width: 100%;
     max-width: 460px;
     padding: 40px 20px;
+    position: relative;
+    z-index: 1;
 }
 
 .auth-container {
@@ -28,7 +59,17 @@
     border-radius: var(--r-lg);
     padding: 40px;
     box-shadow: var(--sh-lg);
+    position: relative;
 }
+
+.auth-return {
+    color: var(--clr-text-2);
+    text-decoration: none;
+    font-size: .85rem;
+    transition: color .3s var(--ease);
+}
+
+.auth-return:hover { color: var(--accent); }
 
 @media (max-width: 480px) {
     .auth-card { padding: 32px 24px; }
@@ -80,6 +121,10 @@
 .auth-link:hover {
     color: #4A7BE0;
     text-decoration: underline;
+}
+
+.auth-card form .c-btn {
+    justify-content: center;
 }
 
 .password-requirements {

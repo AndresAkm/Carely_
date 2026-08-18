@@ -1,9 +1,15 @@
 const authController = {
   getLogin: (req, res) => {
-    res.status(501).json({ message: 'Autenticación no implementada' });
+    res.render('auth/login', {
+      title: 'Iniciar Sesion - Carely',
+      extraCss: ['/css/auth.css'],
+    });
   },
   getRegister: (req, res) => {
-    res.status(501).json({ message: 'Registro no implementado' });
+    res.render('auth/register', {
+      title: 'Crear Cuenta - Carely',
+      extraCss: ['/css/auth.css'],
+    });
   },
 };
 

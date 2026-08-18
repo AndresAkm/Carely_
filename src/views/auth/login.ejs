@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('../partials/head') %>
+</head>
+<body class="auth-page">
+    <main class="page-wrapper">
+        <div class="auth-wrapper">
+            <div class="auth-card">
+                <a href="/" class="auth-return d-inline-flex align-items-center gap-2 mb-4"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
+                <div class="auth-logo text-center mb-4">
+                    <a class="c-nav__brand justify-content-center" href="/">
+                        <span class="c-nav__brand-icon"><i class="bi bi-droplet"></i></span>
+                        <span class="brand-text">Carely</span>
+                    </a>
+                </div>
+                <h1 class="auth-title text-center">Bienvenido de nuevo</h1>
+                <p class="auth-subtitle text-center">Ingresa para continuar con tu ritual de bienestar.</p>
+                <form action="/auth/login" method="post">
+                    <div class="mb-3">
+                        <label for="login-email" class="form-label">Correo electronico</label>
+                        <input id="login-email" name="email" type="email" class="form-control" placeholder="tu@correo.com" autocomplete="email" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="login-password" class="form-label">Contrasena</label>
+                        <input id="login-password" name="password" type="password" class="form-control" placeholder="Ingresa tu contrasena" autocomplete="current-password" required>
+                    </div>
+                    <div class="text-end mb-4"><a href="#" class="auth-link small">Olvide mi contrasena</a></div>
+                    <button type="submit" class="c-btn c-btn--primary w-100">Iniciar Sesion <i class="bi bi-arrow-right ms-2"></i></button>
+                </form>
+                <p class="text-center mt-4 mb-0 small">¿Aun no tienes cuenta? <a href="/auth/registro" class="auth-link">Crear cuenta</a></p>
+            </div>
+        </div>
+    </main>
+    <%- include('../partials/scripts') %>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('../partials/head') %>
+</head>
+<body class="auth-page">
+    <main class="page-wrapper">
+        <div class="auth-wrapper">
+            <div class="auth-card">
+                <a href="/" class="auth-return d-inline-flex align-items-center gap-2 mb-4"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
+                <div class="auth-logo text-center mb-4">
+                    <a class="c-nav__brand justify-content-center" href="/">
+                        <span class="c-nav__brand-icon"><i class="bi bi-droplet"></i></span>
+                        <span class="brand-text">Carely</span>
+                    </a>
+                </div>
+                <h1 class="auth-title text-center">Crea tu cuenta</h1>
+                <p class="auth-subtitle text-center">Empieza a cuidar de ti con productos elegidos para tu bienestar.</p>
+                <form action="/auth/registro" method="post">
+                    <div class="mb-3">
+                        <label for="register-name" class="form-label">Nombre completo</label>
+                        <input id="register-name" name="name" type="text" class="form-control" placeholder="Tu nombre" autocomplete="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="register-email" class="form-label">Correo electronico</label>
+                        <input id="register-email" name="email" type="email" class="form-control" placeholder="tu@correo.com" autocomplete="email" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="register-password" class="form-label">Contrasena</label>
+                        <input id="register-password" name="password" type="password" class="form-control" placeholder="Minimo 8 caracteres" minlength="8" autocomplete="new-password" required>
+                    </div>
+                    <p class="password-requirements text-muted mb-4">Usa al menos 8 caracteres para mantener tu cuenta segura.</p>
+                    <button type="submit" class="c-btn c-btn--primary w-100">Crear cuenta <i class="bi bi-arrow-right ms-2"></i></button>
+                </form>
+                <p class="text-center mt-4 mb-0 small">¿Ya tienes cuenta? <a href="/auth/login" class="auth-link">Iniciar sesion</a></p>
+            </div>
+        </div>
+    </main>
+    <%- include('../partials/scripts') %>
+</body>
+</html>
