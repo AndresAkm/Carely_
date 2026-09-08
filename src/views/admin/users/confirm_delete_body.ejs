@@ -1,0 +1,11 @@
+<div class="dashboard-card dashboard-confirm-card text-center">
+    <div class="dashboard-card-body">
+        <div class="confirm-icon"><i class="bi bi-trash"></i></div>
+        <h1 class="dashboard-heading">¿Eliminar usuario?</h1>
+        <p class="dashboard-muted">Esta acción eliminará <strong><%= user.firstName %> <%= user.lastName %></strong> (<%= user.email %>) permanentemente y sus datos relacionados.</p>
+        <form method="post">
+            <a href="/dashboard/usuarios" class="btn btn-carely-outline">Cancelar</a>
+            <button type="submit" class="btn btn-danger">Eliminar usuario</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,97 @@
+<div class="dashboard-product-view">
+    <div class="dashboard-page-header">
+        <div>
+            <h1 class="dashboard-heading">Productos</h1>
+            <p class="dashboard-muted">Gestiona el catálogo de Carely.</p>
+        </div>
+        <a href="/dashboard/productos/nuevo" class="btn btn-carely-primary"><i class="bi bi-plus-lg me-1"></i>Nuevo producto</a>
+    </div>
+
+    <div class="dashboard-card dashboard-filter-card mb-4">
+        <div class="dashboard-card-body">
+            <form method="get" class="row g-2 align-items-end">
+                <div class="col-md-5">
+                    <label class="d-block text-secondary small fw-semibold mb-1">Buscar</label>
+                    <input class="form-control" type="search" name="q" value="<%= query.q || '' %>" placeholder="Buscar por nombre">
+                </div>
+                <div class="col-md-3">
+                    <label class="d-block text-secondary small fw-semibold mb-1">Categoría</label>
+                    <select class="form-control" name="category">
+                        <option value="">Todas</option>
+                        <% categories.forEach(function(c) { %>
+                        <option value="<%= c._id %>" <%= String(query.category) === String(c._id) ? 'selected' : '' %>><%= c.name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="d-block text-secondary small fw-semibold mb-1">Estado</label>
+                    <select class="form-control" name="isActive">
+                        <option value="">Todos</option>
+                        <option value="true" <%= query.isActive === 'true' ? 'selected' : '' %>>Activos</option>
+                        <option value="false" <%= query.isActive === 'false' ? 'selected' : '' %>>Inactivos</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-carely-outline w-100" type="submit"><i class="bi bi-search"></i> Filtrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="dashboard-card-body p-0">
+            <div class="table-responsive">
+                <table class="table dashboard-table dashboard-product-table align-middle mb-0">
+                    <thead>
+                        <tr><th>Imagen</th><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th><th class="text-end">Acciones</th></tr>
+                    </thead>
+                    <tbody>
+                        <% products.forEach(function(p) { %>
+                        <tr>
+                            <td>
+                                <% if (p.image) { %>
+                                <img class="dashboard-product-thumb" src="<%= p.image %>" alt="<%= p.name %>">
+                                <% } else { %>
+                                <div class="dashboard-product-thumb d-flex align-items-center justify-content-center text-secondary"><i class="bi bi-box"></i></div>
+                                <% } %>
+                            </td>
+                            <td>
+                                <strong><%= p.name %></strong>
+                                <small class="d-block text-secondary"><%= p.description ? p.description.substring(0, 55) + (p.description.length > 55 ? '...' : '') : '' %></small>
+                            </td>
+                            <td><%= p.category ? p.category.name : '-' %></td>
+                            <td>$ <%= Number(p.price).toFixed(2) %></td>
+                            <td><%= p.stock %></td>
+                            <td>
+                                <% if (p.isActive) { %>
+                                <span class="status-badge status-badge--active">Activo</span>
+                                <% } else { %>
+                                <span class="status-badge status-badge--inactive">Inactivo</span>
+                                <% } %>
+                            </td>
+                            <td class="text-end">
+                                <a href="/dashboard/productos/<%= p._id %>/editar" class="btn btn-sm btn-carely-outline"><i class="bi bi-pencil"></i></a>
+                                <a href="/dashboard/productos/<%= p._id %>/eliminar" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                        <% }); %>
+                        <% if (products.length === 0) { %>
+                        <tr><td colspan="7" class="text-center py-5 text-secondary">No hay productos registrados.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <% if (pages > 1) { %>
+    <nav class="dashboard-pagination" aria-label="Paginación de productos">
+        <ul class="pagination justify-content-center mb-0">
+            <li class="page-item <%= page <= 1 ? 'disabled' : '' %>"><a class="page-link" href="?<%= 'q=' + encodeURIComponent(query.q || '') + '&category=' + (query.category || '') + '&isActive=' + (query.isActive || '') + '&page=' + (page - 1) %>"><i class="bi bi-chevron-left"></i></a></li>
+            <% for (var i = 1; i <= pages; i++) { %>
+            <li class="page-item <%= i === page ? 'active' : '' %>"><a class="page-link" href="?<%= 'q=' + encodeURIComponent(query.q || '') + '&category=' + (query.category || '') + '&isActive=' + (query.isActive || '') + '&page=' + i %>"><%= i %></a></li>
+            <% } %>
+            <li class="page-item <%= page >= pages ? 'disabled' : '' %>"><a class="page-link" href="?<%= 'q=' + encodeURIComponent(query.q || '') + '&category=' + (query.category || '') + '&isActive=' + (query.isActive || '') + '&page=' + (page + 1) %>"><i class="bi bi-chevron-right"></i></a></li>
+        </ul>
+    </nav>
+    <% } %>
+</div>

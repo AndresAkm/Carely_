@@ -1,0 +1,2 @@
+<% var body = include('form_body', { user: user, error: error, formData: formData }); %>
+<%- include('../dashboard_base', { title: title, currentPath: currentPath, pageTitle: user ? 'Editar usuario' : 'Nuevo usuario', bodyContent: body }) %>

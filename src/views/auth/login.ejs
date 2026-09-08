@@ -5,6 +5,7 @@
 </head>
 <body class="auth-page">
     <main class="page-wrapper">
+        <%- include('../partials/flash') %>
         <div class="auth-wrapper">
             <div class="auth-card">
                 <a href="/" class="auth-return d-inline-flex align-items-center gap-2 mb-4"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
@@ -16,10 +17,13 @@
                 </div>
                 <h1 class="auth-title text-center">Bienvenido de nuevo</h1>
                 <p class="auth-subtitle text-center">Ingresa para continuar con tu ritual de bienestar.</p>
+                <% if (typeof error !== 'undefined' && error) { %>
+                <div class="alert alert-danger d-flex align-items-center gap-2 mb-4"><i class="bi bi-exclamation-circle-fill"></i><span><%= error %></span></div>
+                <% } %>
                 <form action="/auth/login" method="post">
                     <div class="mb-3">
                         <label for="login-email" class="form-label">Correo electronico</label>
-                        <input id="login-email" name="email" type="email" class="form-control" placeholder="tu@correo.com" autocomplete="email" required>
+                        <input id="login-email" name="email" type="email" class="form-control" placeholder="tu@correo.com" autocomplete="email" required value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>">
                     </div>
                     <div class="mb-2">
                         <label for="login-password" class="form-label">Contrasena</label>

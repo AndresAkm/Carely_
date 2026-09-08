@@ -1,0 +1,58 @@
+<div class="dashboard-page-header">
+    <div>
+        <h1 class="dashboard-heading"><%= product ? 'Editar producto' : 'Nuevo producto' %></h1>
+        <p class="dashboard-muted">Completa la información del producto.</p>
+    </div>
+    <a href="/dashboard/productos" class="btn btn-carely-outline">Volver</a>
+</div>
+<div class="dashboard-card dashboard-form-card">
+    <div class="dashboard-card-body">
+        <% if (error) { %>
+        <div class="alert alert-danger d-flex align-items-center gap-2 mb-4"><i class="bi bi-exclamation-circle-fill"></i><span><%= error %></span></div>
+        <% } %>
+        <form method="post" enctype="multipart/form-data" novalidate class="dashboard-product-form" onsubmit="const button=this.querySelector('[type=submit]'); if (button.disabled) return false; button.disabled=true; button.textContent='Guardando...';">
+            <div class="dashboard-field field-name">
+                <label for="id_name">Nombre</label>
+                <input id="id_name" name="name" type="text" class="form-control" value="<%= formData.name || '' %>" required>
+            </div>
+            <div class="dashboard-field">
+                <label for="id_category">Categoría</label>
+                <select id="id_category" name="category" class="form-control" required>
+                    <option value="">Selecciona una categoría</option>
+                    <% categories.forEach(function(c) { %>
+                    <option value="<%= c._id %>" <%= String(formData.category && formData.category._id ? formData.category._id : formData.category) === String(c._id) ? 'selected' : '' %>><%= c.name %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="dashboard-field field-description">
+                <label for="id_description">Descripción</label>
+                <textarea id="id_description" name="description" class="form-control" rows="3"><%= formData.description || '' %></textarea>
+            </div>
+            <div class="dashboard-field">
+                <label for="id_price">Precio (COP)</label>
+                <input id="id_price" name="price" type="number" step="0.01" min="0" class="form-control" value="<%= formData.price || '' %>" required>
+            </div>
+            <div class="dashboard-field">
+                <label for="id_stock">Stock</label>
+                <input id="id_stock" name="stock" type="number" min="0" class="form-control" value="<%= formData.stock || 0 %>">
+            </div>
+            <div class="dashboard-field field-image">
+                <label for="id_image">Imagen (URL)</label>
+                <input id="id_image" name="image" type="text" class="form-control" value="<%= formData.image || '' %>" placeholder="/images/producto.jpg">
+                <small>Ingresa una URL de imagen o deja vacío para usar el marcador de posición.</small>
+            </div>
+            <div class="dashboard-field form-check">
+                <input id="id_isActive" name="isActive" type="checkbox" class="form-check-input" <%= formData.isActive === false ? '' : 'checked' %>>
+                <label class="form-check-label" for="id_isActive">Activo</label>
+            </div>
+            <div class="dashboard-field form-check">
+                <input id="id_featured" name="featured" type="checkbox" class="form-check-input" <%= formData.featured ? 'checked' : '' %>>
+                <label class="form-check-label" for="id_featured">Destacado</label>
+            </div>
+            <div class="d-flex gap-2 justify-content-end mt-2 form-actions">
+                <a href="/dashboard/productos" class="btn btn-carely-outline">Cancelar</a>
+                <button type="submit" class="btn btn-carely-primary">Guardar producto</button>
+            </div>
+        </form>
+    </div>
+</div>

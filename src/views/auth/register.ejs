@@ -5,6 +5,7 @@
 </head>
 <body class="auth-page">
     <main class="page-wrapper">
+        <%- include('../partials/flash') %>
         <div class="auth-wrapper">
             <div class="auth-card">
                 <a href="/" class="auth-return d-inline-flex align-items-center gap-2 mb-4"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
@@ -16,14 +17,17 @@
                 </div>
                 <h1 class="auth-title text-center">Crea tu cuenta</h1>
                 <p class="auth-subtitle text-center">Empieza a cuidar de ti con productos elegidos para tu bienestar.</p>
+                <% if (typeof error !== 'undefined' && error) { %>
+                <div class="alert alert-danger d-flex align-items-center gap-2 mb-4"><i class="bi bi-exclamation-circle-fill"></i><span><%= error %></span></div>
+                <% } %>
                 <form action="/auth/registro" method="post">
                     <div class="mb-3">
                         <label for="register-name" class="form-label">Nombre completo</label>
-                        <input id="register-name" name="name" type="text" class="form-control" placeholder="Tu nombre" autocomplete="name" required>
+                        <input id="register-name" name="name" type="text" class="form-control" placeholder="Tu nombre" autocomplete="name" required value="<%= typeof formData !== 'undefined' && formData.name ? formData.name : '' %>">
                     </div>
                     <div class="mb-3">
                         <label for="register-email" class="form-label">Correo electronico</label>
-                        <input id="register-email" name="email" type="email" class="form-control" placeholder="tu@correo.com" autocomplete="email" required>
+                        <input id="register-email" name="email" type="email" class="form-control" placeholder="tu@correo.com" autocomplete="email" required value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>">
                     </div>
                     <div class="mb-2">
                         <label for="register-password" class="form-label">Contrasena</label>

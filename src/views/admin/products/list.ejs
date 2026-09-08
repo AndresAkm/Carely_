@@ -1,0 +1,2 @@
+<% var body = include('list_body', { products: products, total: total, pages: pages, page: page, query: query, categories: categories }); %>
+<%- include('../dashboard_base', { title: title, currentPath: currentPath, pageTitle: 'Productos', bodyContent: body }) %>

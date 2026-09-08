@@ -179,6 +179,12 @@
 .c-nav__btn {
     border: 1.5px solid var(--clr-border);
     padding: 8px 20px !important;
+    background: transparent;
+    font-family: var(--ff-sans);
+    font-size: .88rem;
+    font-weight: 500;
+    color: var(--clr-text-2);
+    cursor: pointer;
 }
 
 .c-nav__btn:hover {
@@ -197,6 +203,24 @@
     background: color-mix(in srgb, var(--accent) 85%, #000) !important;
     border-color: color-mix(in srgb, var(--accent) 85%, #000) !important;
     color: #fff !important;
+}
+
+.c-nav__user {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: var(--r-pill);
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--clr-text);
+    background: rgba(0, 0, 0, .04);
+    white-space: nowrap;
+}
+
+.c-nav__user i {
+    font-size: 1.1rem;
+    color: var(--accent);
 }
 
 .c-nav__hamburger {

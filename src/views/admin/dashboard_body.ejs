@@ -1,0 +1,98 @@
+<div class="container-fluid">
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-products"><i class="bi bi-box"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number"><%= data.totalProducts %></span>
+                    <span class="stat-label">Productos</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-users"><i class="bi bi-people"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number"><%= data.totalUsers %></span>
+                    <span class="stat-label">Usuarios</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-categories"><i class="bi bi-tags"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number"><%= data.totalCategories %></span>
+                    <span class="stat-label">Categorías</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-orders"><i class="bi bi-cart"></i></div>
+                <div class="stat-info">
+                    <span class="stat-number">0</span>
+                    <span class="stat-label">Pedidos</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
+                    <h5 class="dashboard-card-title">Bienvenida, <%= currentUser.firstName %></h5>
+                    <p class="dashboard-card-subtitle mb-0">Este es tu panel de administración. Desde aquí podrás gestionar tu tienda Carely.</p>
+                </div>
+                <div class="dashboard-card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="feature-card">
+                                <a href="/dashboard/productos" class="dashboard-feature-link"><i class="bi bi-box"></i><h6>Productos</h6><p class="small text-secondary mb-0">Gestiona tu catálogo de productos.</p></a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-card">
+                                <a href="/dashboard/categorias" class="dashboard-feature-link"><i class="bi bi-tags"></i><h6>Categorías</h6><p class="small text-secondary mb-0">Organiza tus productos por categorías.</p></a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-card">
+                                <a href="/dashboard/usuarios" class="dashboard-feature-link"><i class="bi bi-people"></i><h6>Usuarios</h6><p class="small text-secondary mb-0">Administra las cuentas de tus clientes.</p></a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="feature-card">
+                                <a href="#" onclick="return false;" class="dashboard-feature-link"><i class="bi bi-bar-chart"></i><h6>Reportes</h6><p class="small text-secondary mb-0">Visualiza estadísticas de tu tienda.</p></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
+                    <h5 class="dashboard-card-title">Usuarios Recientes</h5>
+                </div>
+                <div class="dashboard-card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        <% data.recentUsers.forEach(function(u) { %>
+                        <li class="list-group-item d-flex align-items-center gap-3 px-4 py-3">
+                            <div class="user-avatar-sm"><%= u.firstName ? u.firstName.charAt(0).toUpperCase() : '?' %></div>
+                            <div>
+                                <span class="d-block fw-medium"><%= u.firstName %> <%= u.lastName %></span>
+                                <small class="text-secondary"><%= u.email %></small>
+                            </div>
+                        </li>
+                        <% }); %>
+                        <% if (data.recentUsers.length === 0) { %>
+                        <li class="list-group-item text-center py-4 text-secondary">No hay usuarios registrados.</li>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

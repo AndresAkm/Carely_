@@ -1,0 +1,56 @@
+<div class="dashboard-page-header">
+    <div>
+        <h1 class="dashboard-heading">Categorías</h1>
+        <p class="dashboard-muted">Organiza los productos de tu catálogo.</p>
+    </div>
+    <a href="/dashboard/categorias/nueva" class="btn btn-carely-primary"><i class="bi bi-plus-lg me-1"></i>Nueva categoría</a>
+</div>
+
+<div class="dashboard-card">
+    <div class="dashboard-card-body p-0">
+        <div class="table-responsive">
+            <table class="table dashboard-table align-middle mb-0">
+                <thead>
+                    <tr><th>Nombre</th><th>Icono</th><th>Orden</th><th>Estado</th><th class="text-end">Acciones</th></tr>
+                </thead>
+                <tbody>
+                    <% categories.forEach(function(c) { %>
+                    <tr>
+                        <td>
+                            <strong><%= c.name %></strong>
+                            <small class="d-block text-secondary"><%= c.description ? c.description.substring(0, 70) + (c.description.length > 70 ? '...' : '') : '' %></small>
+                        </td>
+                        <td><i class="<%= c.icon %> fs-4"></i></td>
+                        <td><%= c.order %></td>
+                        <td>
+                            <% if (c.isActive) { %>
+                            <span class="status-badge status-badge--active">Activa</span>
+                            <% } else { %>
+                            <span class="status-badge status-badge--inactive">Inactiva</span>
+                            <% } %>
+                        </td>
+                        <td class="text-end">
+                            <a href="/dashboard/categorias/<%= c._id %>/editar" class="btn btn-sm btn-carely-outline" aria-label="Editar"><i class="bi bi-pencil"></i></a>
+                            <a href="/dashboard/categorias/<%= c._id %>/eliminar" class="btn btn-sm btn-outline-danger" aria-label="Eliminar"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                    <% }); %>
+                    <% if (categories.length === 0) { %>
+                    <tr><td colspan="5" class="text-center py-5 text-secondary">No hay categorías registradas.</td></tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<% if (pages > 1) { %>
+<nav class="dashboard-pagination" aria-label="Paginación de categorías">
+    <ul class="pagination justify-content-center mb-0">
+        <li class="page-item <%= page <= 1 ? 'disabled' : '' %>"><a class="page-link" href="?page=<%= page - 1 %>" aria-label="Anterior"><i class="bi bi-chevron-left"></i></a></li>
+        <% for (var i = 1; i <= pages; i++) { %>
+        <li class="page-item <%= i === page ? 'active' : '' %>"><a class="page-link" href="?page=<%= i %>"><%= i %></a></li>
+        <% } %>
+        <li class="page-item <%= page >= pages ? 'disabled' : '' %>"><a class="page-link" href="?page=<%= page + 1 %>" aria-label="Siguiente"><i class="bi bi-chevron-right"></i></a></li>
+    </ul>
+</nav>
+<% } %>

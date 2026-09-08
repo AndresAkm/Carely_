@@ -1,0 +1,73 @@
+<aside class="dashboard-sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <a href="/" class="sidebar-logo d-flex align-items-center text-decoration-none" aria-label="Carely">
+            <span class="c-nav__brand-icon"><i class="bi bi-droplet"></i></span>
+        </a>
+        <button class="sidebar-close d-lg-none btn btn-link text-white" onclick="toggleSidebar()">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+    <nav class="sidebar-nav">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link <%= currentPath === '/dashboard' ? 'active' : '' %>" href="/dashboard">
+                    <i class="bi bi-grid"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <%= String(currentPath).startsWith('/dashboard/usuarios') ? 'active' : '' %>" href="/dashboard/usuarios">
+                    <i class="bi bi-people"></i>
+                    <span>Usuarios</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <%= String(currentPath).startsWith('/dashboard/productos') ? 'active' : '' %>" href="/dashboard/productos">
+                    <i class="bi bi-box"></i>
+                    <span>Productos</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <%= String(currentPath).startsWith('/dashboard/categorias') ? 'active' : '' %>" href="/dashboard/categorias">
+                    <i class="bi bi-tags"></i>
+                    <span>Categorías</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="return false;">
+                    <i class="bi bi-cart"></i>
+                    <span>Pedidos</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="return false;">
+                    <i class="bi bi-geo-alt"></i>
+                    <span>Direcciones</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="return false;">
+                    <i class="bi bi-bar-chart"></i>
+                    <span>Reportes</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="return false;">
+                    <i class="bi bi-gear"></i>
+                    <span>Configuración</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="sidebar-footer">
+        <div class="d-flex align-items-center gap-2 px-3 py-2">
+            <div class="sidebar-user-avatar">
+                <%= currentUser.firstName ? currentUser.firstName.charAt(0).toUpperCase() : 'A' %><%= currentUser.lastName ? currentUser.lastName.charAt(0).toUpperCase() : '' %>
+            </div>
+            <div class="sidebar-user-info">
+                <span class="sidebar-user-name"><%= currentUser.firstName %> <%= currentUser.lastName %></span>
+                <span class="sidebar-user-role">Administrador</span>
+            </div>
+        </div>
+    </div>
+</aside>

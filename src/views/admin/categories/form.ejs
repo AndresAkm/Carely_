@@ -1,0 +1,2 @@
+<% var body = include('form_body', { category: category, error: error, formData: formData }); %>
+<%- include('../dashboard_base', { title: title, currentPath: currentPath, pageTitle: category ? 'Editar categoría' : 'Nueva categoría', bodyContent: body }) %>

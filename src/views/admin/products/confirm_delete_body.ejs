@@ -1,0 +1,11 @@
+<div class="dashboard-card dashboard-confirm-card text-center">
+    <div class="dashboard-card-body">
+        <div class="confirm-icon"><i class="bi bi-trash"></i></div>
+        <h1 class="dashboard-heading">¿Eliminar producto?</h1>
+        <p class="dashboard-muted">Esta acción eliminará <strong><%= product.name %></strong> permanentemente.</p>
+        <form method="post">
+            <a href="/dashboard/productos" class="btn btn-carely-outline">Cancelar</a>
+            <button type="submit" class="btn btn-danger">Eliminar producto</button>
+        </form>
+    </div>
+</div>
