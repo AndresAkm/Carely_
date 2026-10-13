@@ -128,7 +128,7 @@
                             <p class="product-card__desc"><%= product.description.substring(0, 80) %><% if (product.description.length > 80) { %>...<% } %></p>
                             <% } %>
                             <div class="product-card__footer">
-                                <span class="product-card__price">$<%= typeof product.price === 'number' ? product.price.toFixed(2) : parseFloat(product.price).toFixed(2) %></span>
+                                <span class="product-card__price">$ <%= Number(product.price).toLocaleString('es-CO') %></span>
                                 <% if (product.stock > 0) { %>
                                 <span class="product-card__stock in-stock">
                                     <i class="bi bi-check-circle-fill"></i>

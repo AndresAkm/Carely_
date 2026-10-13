@@ -60,7 +60,7 @@
                                 <small class="d-block text-secondary"><%= p.description ? p.description.substring(0, 55) + (p.description.length > 55 ? '...' : '') : '' %></small>
                             </td>
                             <td><%= p.category ? p.category.name : '-' %></td>
-                            <td>$ <%= Number(p.price).toFixed(2) %></td>
+                            <td>$ <%= Number(p.price).toLocaleString('es-CO') %></td>
                             <td><%= p.stock %></td>
                             <td>
                                 <% if (p.isActive) { %>
