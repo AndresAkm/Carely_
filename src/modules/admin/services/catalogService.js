@@ -2,6 +2,7 @@ import Product from '../../products/models/Product.js';
 import Category from '../../categories/models/Category.js';
 import AppError from '../../../common/errors/AppError.js';
 import { supabaseStorage } from '../../../config/storage/index.js';
+import { auditService } from '../../audit/index.js';
 
 class CatalogAdminError extends AppError {
   constructor(message, statusCode = 400) {
@@ -56,7 +57,7 @@ const catalogService = {
     }
 
     try {
-      return await Product.create({
+      const product = await Product.create({
         category,
         name: name.trim(),
         description: description || '',
@@ -66,6 +67,15 @@ const catalogService = {
         isActive: isActive === 'on' || isActive === true,
         featured: featured === 'on' || featured === true,
       });
+
+      auditService.record({
+        action: 'PRODUCT_CREATED',
+        entity: 'Product',
+        entityId: product._id,
+        metadata: { name: product.name, category: String(product.category) },
+      });
+
+      return product;
     } catch (error) {
       if (imageFile) {
         await supabaseStorage.deleteFile(imageUrl).catch(() => {});
@@ -117,6 +127,13 @@ const catalogService = {
       await supabaseStorage.deleteFile(previousImage).catch(() => {});
     }
 
+    auditService.record({
+      action: 'PRODUCT_UPDATED',
+      entity: 'Product',
+      entityId: product._id,
+      metadata: { name: product.name, category: String(product.category) },
+    });
+
     return product;
   },
 
@@ -126,6 +143,13 @@ const catalogService = {
     if (product.image) {
       await supabaseStorage.deleteFile(product.image).catch(() => {});
     }
+
+    auditService.record({
+      action: 'PRODUCT_DELETED',
+      entity: 'Product',
+      entityId: product._id,
+      metadata: { name: product.name, category: String(product.category) },
+    });
   },
 
   async getAllCategories() {
@@ -154,7 +178,7 @@ const catalogService = {
     }
     const existing = await Category.findOne({ name: { $regex: `^${escapeRegExp(name.trim())}$`, $options: 'i' } });
     if (existing) throw new CatalogAdminError('Ya existe una categoría con este nombre.');
-    return Category.create({
+    const category = await Category.create({
       name: name.trim(),
       description: description || '',
       icon,
@@ -162,6 +186,15 @@ const catalogService = {
       order: Number(order) || 0,
       isActive: isActive === 'on' || isActive === true,
     });
+
+    auditService.record({
+      action: 'CATEGORY_CREATED',
+      entity: 'Category',
+      entityId: category._id,
+      metadata: { name: category.name },
+    });
+
+    return category;
   },
 
   async updateCategory(id, { name, description, icon, image, order, isActive }) {
@@ -176,16 +209,31 @@ const catalogService = {
     category.order = Number(order) || 0;
     category.isActive = isActive === 'on' || isActive === true;
     await category.save();
+
+    auditService.record({
+      action: 'CATEGORY_UPDATED',
+      entity: 'Category',
+      entityId: category._id,
+      metadata: { name: category.name },
+    });
+
     return category;
   },
 
   async deleteCategory(id) {
-    await this.getCategoryById(id);
+    const category = await this.getCategoryById(id);
     const count = await Product.countDocuments({ category: id });
     if (count > 0) {
       throw new CatalogAdminError('No puedes eliminar una categoría con productos asociados.', 409);
     }
     await Category.deleteOne({ _id: id });
+
+    auditService.record({
+      action: 'CATEGORY_DELETED',
+      entity: 'Category',
+      entityId: category._id,
+      metadata: { name: category.name },
+    });
   },
 };
 

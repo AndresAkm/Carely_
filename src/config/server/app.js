@@ -6,6 +6,7 @@ import { getDirname } from '../../common/utils/path.js';
 import router from '../../routes/index.js';
 import { errorHandler } from '../../common/middleware/errorHandler.js';
 import { notFoundHandler } from '../../common/middleware/notFound.js';
+import { requestContext } from '../../common/middleware/requestContext.js';
 import env from '../environment/env.js';
 
 const __dirname = getDirname(import.meta.url);
@@ -43,6 +44,8 @@ const createApp = () => {
     delete req.session.flash;
     next();
   });
+
+  app.use(requestContext);
 
   app.use('/', router);
 

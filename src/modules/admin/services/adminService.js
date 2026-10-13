@@ -3,6 +3,7 @@ import User from '../../users/models/User.js';
 import Product from '../../products/models/Product.js';
 import Category from '../../categories/models/Category.js';
 import AppError from '../../../common/errors/AppError.js';
+import { auditService } from '../../audit/index.js';
 
 class AdminError extends AppError {
   constructor(message, statusCode = 400) {
@@ -64,7 +65,7 @@ const adminService = {
       throw new AdminError('Ya existe un usuario con este correo electrónico.');
     }
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-    return User.create({
+    const user = await User.create({
       firstName: firstName.trim(),
       lastName: lastName ? lastName.trim() : '',
       email: normalizedEmail,
@@ -73,6 +74,16 @@ const adminService = {
       role: role === 'admin' ? 'admin' : 'client',
       isActive: isActive === 'on' || isActive === true,
     });
+
+    auditService.record({
+      action: 'USER_CREATED',
+      entity: 'User',
+      entityId: user._id,
+      actorEmail: user.email,
+      metadata: { email: user.email, role: user.role },
+    });
+
+    return user;
   },
 
   async updateUser(id, { firstName, lastName, email, phone, role, isActive }) {
@@ -95,6 +106,19 @@ const adminService = {
     user.role = role === 'admin' ? 'admin' : 'client';
     user.isActive = isActiveBool;
     await user.save();
+
+    auditService.record({
+      action: 'USER_UPDATED',
+      entity: 'User',
+      entityId: user._id,
+      actorEmail: user.email,
+      metadata: {
+        email: user.email,
+        role: user.role,
+        isActive: user.isActive,
+      },
+    });
+
     return user;
   },
 
@@ -111,6 +135,15 @@ const adminService = {
     }
     user.isActive = !user.isActive;
     await user.save();
+
+    auditService.record({
+      action: 'USER_STATUS_CHANGED',
+      entity: 'User',
+      entityId: user._id,
+      actorEmail: user.email,
+      metadata: { isActive: user.isActive, role: user.role },
+    });
+
     return user;
   },
 
@@ -121,6 +154,15 @@ const adminService = {
     }
     user.password = await bcrypt.hash(password, SALT_ROUNDS);
     await user.save();
+
+    auditService.record({
+      action: 'PASSWORD_CHANGED',
+      entity: 'User',
+      entityId: user._id,
+      actorEmail: user.email,
+      metadata: { email: user.email },
+    });
+
     return user;
   },
 
@@ -136,6 +178,14 @@ const adminService = {
       }
     }
     await user.deleteOne();
+
+    auditService.record({
+      action: 'USER_DELETED',
+      entity: 'User',
+      entityId: user._id,
+      actorEmail: user.email,
+      metadata: { email: user.email, role: user.role },
+    });
   },
 };
 

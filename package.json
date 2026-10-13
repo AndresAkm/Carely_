@@ -19,7 +19,9 @@
     "express-session": "^1.19.0",
     "method-override": "^3.0.0",
     "mongoose": "^8.9.5",
-    "multer": "^2.4.0"
+    "multer": "^2.4.0",
+    "winston": "^3.19.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

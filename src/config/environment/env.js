@@ -8,6 +8,10 @@ const env = {
   isDevelopment: (process.env.NODE_ENV || 'development') === 'development',
   isProduction: process.env.NODE_ENV === 'production',
   isTest: process.env.NODE_ENV === 'test',
+  log: {
+    level: process.env.LOG_LEVEL || ((process.env.NODE_ENV || 'development') === 'production' ? 'info' : 'debug'),
+    dir: process.env.LOG_DIR || 'logs',
+  },
   supabase: {
     url: (process.env.SUPABASE_URL || '').replace(/\/+$/, ''),
     s3AccessKeyId: process.env.SUPABASE_S3_ACCESS_KEY_ID || '',
