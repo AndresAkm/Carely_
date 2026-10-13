@@ -40,4 +40,7 @@ router.post('/categorias/nueva', asyncHandler(adminController.categoryCreate));
 router.post('/categorias/:id/editar', asyncHandler(adminController.categoryUpdate));
 router.post('/categorias/:id/eliminar', asyncHandler(adminController.categoryDelete));
 
+// Auditoría
+router.get('/auditoria', adminController.auditList);
+
 export default router;

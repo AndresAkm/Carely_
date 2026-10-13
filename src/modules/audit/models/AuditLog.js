@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import env from '../../../config/environment/env.js';
 
 const auditLogSchema = new mongoose.Schema(
   {
@@ -19,6 +20,10 @@ const auditLogSchema = new mongoose.Schema(
 
 auditLogSchema.index({ entity: 1, entityId: 1 });
 auditLogSchema.index({ createdAt: -1 });
+auditLogSchema.index(
+  { createdAt: 1 },
+  { expireAfterSeconds: env.audit.retentionDays * 24 * 60 * 60, name: 'createdAt_ttl' }
+);
 
 const AuditLog = mongoose.model('AuditLog', auditLogSchema);
 

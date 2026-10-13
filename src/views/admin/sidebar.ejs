@@ -34,6 +34,12 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link <%= String(currentPath).startsWith('/dashboard/auditoria') ? 'active' : '' %>" href="/dashboard/auditoria">
+                    <i class="bi bi-clock-history"></i>
+                    <span>Auditoría</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="#" onclick="return false;">
                     <i class="bi bi-cart"></i>
                     <span>Pedidos</span>

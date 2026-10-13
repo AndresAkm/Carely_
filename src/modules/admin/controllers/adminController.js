@@ -1,6 +1,7 @@
 import asyncHandler from '../../../common/helpers/asyncHandler.js';
 import adminService from '../services/adminService.js';
 import catalogService from '../services/catalogService.js';
+import { auditService } from '../../audit/index.js';
 
 const adminController = {
   dashboard: asyncHandler(async (req, res) => {
@@ -315,6 +316,31 @@ const adminController = {
       req.session.flash = { type: 'error', message: error.message };
     }
     return res.redirect('/dashboard/categorias');
+  }),
+
+  // ---------- AUDITORÍA ----------
+  auditList: asyncHandler(async (req, res) => {
+    const page = parseInt(req.query.page, 10) || 1;
+    const [data, filters] = await Promise.all([
+      auditService.list({
+        q: req.query.q,
+        entity: req.query.entity,
+        action: req.query.action,
+        source: req.query.source,
+        page,
+      }),
+      auditService.getFilterOptions(),
+    ]);
+    res.render('admin/audit/list', {
+      title: 'Auditoría - Carely',
+      currentPath: '/dashboard/auditoria',
+      logs: data.logs,
+      total: data.total,
+      pages: data.pages,
+      page,
+      query: req.query,
+      filters,
+    });
   }),
 };
 

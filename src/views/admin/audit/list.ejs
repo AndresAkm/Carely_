@@ -1,0 +1,2 @@
+<% var body = include('list_body', { logs: logs, total: total, pages: pages, page: page, query: query, filters: filters }); %>
+<%- include('../dashboard_base', { title: title, currentPath: currentPath, pageTitle: 'Auditoría', bodyContent: body }) %>

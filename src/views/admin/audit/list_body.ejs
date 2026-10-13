@@ -1,0 +1,97 @@
+<div class="dashboard-page-header">
+    <div>
+        <h1 class="dashboard-heading">Auditoría</h1>
+        <p class="dashboard-muted">Registro de todas las acciones realizadas sobre la base de datos.</p>
+    </div>
+    <span class="dashboard-muted"><%= total %> registro(s)</span>
+</div>
+
+<div class="dashboard-card dashboard-filter-card mb-4">
+    <div class="dashboard-card-body">
+        <form method="get" class="row g-2 align-items-end">
+            <div class="col-md-4">
+                <input class="form-control" type="search" name="q" value="<%= query.q || '' %>" placeholder="Buscar por acción, entidad, correo o requestId">
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" name="entity">
+                    <option value="">Todas las entidades</option>
+                    <% filters.entities.forEach(function(e) { %>
+                    <option value="<%= e %>" <%= query.entity === e ? 'selected' : '' %>><%= e %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" name="action">
+                    <option value="">Todas las acciones</option>
+                    <% filters.actions.forEach(function(a) { %>
+                    <option value="<%= a %>" <%= query.action === a ? 'selected' : '' %>><%= a %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" name="source">
+                    <option value="">Todos los orígenes</option>
+                    <% filters.sources.forEach(function(s) { %>
+                    <option value="<%= s %>" <%= query.source === s ? 'selected' : '' %>><%= s %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-carely-outline w-100" type="submit"><i class="bi bi-search"></i> Filtrar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="dashboard-card">
+    <div class="dashboard-card-body p-0">
+        <div class="table-responsive">
+            <table class="table dashboard-table align-middle mb-0">
+                <thead>
+                    <tr><th>Fecha</th><th>Acción</th><th>Entidad</th><th>Actor</th><th>Origen</th><th>Detalle</th></tr>
+                </thead>
+                <tbody>
+                    <% logs.forEach(function(l) { %>
+                    <tr>
+                        <td><%= new Date(l.createdAt).toLocaleString('es-CO') %></td>
+                        <td><span class="status-badge status-badge--inactive"><%= l.action %></span></td>
+                        <td>
+                            <strong><%= l.entity %></strong>
+                            <% if (l.entityId) { %><small class="d-block text-secondary"><%= l.entityId %></small><% } %>
+                        </td>
+                        <td><%= l.actorEmail || '-' %></td>
+                        <td><%= l.source %></td>
+                        <td>
+                            <% if (l.changes || l.metadata) { %>
+                            <details>
+                                <summary class="text-secondary" style="cursor:pointer">Ver</summary>
+                                <% if (l.changes) { %><pre class="small mb-1"><%= JSON.stringify(l.changes, null, 2) %></pre><% } %>
+                                <% if (l.metadata) { %><pre class="small mb-0"><%= JSON.stringify(l.metadata, null, 2) %></pre><% } %>
+                            </details>
+                            <% } else { %>
+                            <span class="text-secondary">-</span>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <% }); %>
+                    <% if (logs.length === 0) { %>
+                    <tr><td colspan="6" class="text-center py-5 text-secondary">No hay registros de auditoría que coincidan con los filtros.</td></tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<% if (pages > 1) { %>
+<% var queryString = 'q=' + encodeURIComponent(query.q || '') + '&entity=' + (query.entity || '') + '&action=' + (query.action || '') + '&source=' + (query.source || ''); %>
+<nav class="dashboard-pagination" aria-label="Paginación de auditoría">
+    <ul class="pagination justify-content-center mb-0">
+        <li class="page-item <%= page <= 1 ? 'disabled' : '' %>"><a class="page-link" href="?<%= queryString + '&page=' + (page - 1) %>">‹</a></li>
+        <% for (var i = 1; i <= pages; i++) { %>
+        <li class="page-item <%= i === page ? 'active' : '' %>"><a class="page-link" href="?<%= queryString + '&page=' + i %>"><%= i %></a></li>
+        <% } %>
+        <li class="page-item <%= page >= pages ? 'disabled' : '' %>"><a class="page-link" href="?<%= queryString + '&page=' + (page + 1) %>">›</a></li>
+    </ul>
+</nav>
+<% } %>

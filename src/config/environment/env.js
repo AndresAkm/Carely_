@@ -12,6 +12,9 @@ const env = {
     level: process.env.LOG_LEVEL || ((process.env.NODE_ENV || 'development') === 'production' ? 'info' : 'debug'),
     dir: process.env.LOG_DIR || 'logs',
   },
+  audit: {
+    retentionDays: parseInt(process.env.AUDIT_RETENTION_DAYS, 10) || 180,
+  },
   supabase: {
     url: (process.env.SUPABASE_URL || '').replace(/\/+$/, ''),
     s3AccessKeyId: process.env.SUPABASE_S3_ACCESS_KEY_ID || '',
