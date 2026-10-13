@@ -1,6 +1,7 @@
 import Product from '../../products/models/Product.js';
 import Category from '../../categories/models/Category.js';
 import AppError from '../../../common/errors/AppError.js';
+import { supabaseStorage } from '../../../config/storage/index.js';
 
 class CatalogAdminError extends AppError {
   constructor(message, statusCode = 400) {
@@ -36,26 +37,44 @@ const catalogService = {
     return product;
   },
 
-  async createProduct({ category, name, description, price, image, stock, isActive, featured }) {
+  async createProduct({ category, name, description, price, image, stock, isActive, featured }, imageFile) {
     if (!category || !name || price === undefined || price === '') {
       throw new CatalogAdminError('Categoría, nombre y precio son obligatorios.');
     }
     if (Number(price) < 0) {
       throw new CatalogAdminError('El precio no puede ser negativo.');
     }
-    return Product.create({
-      category,
-      name: name.trim(),
-      description: description || '',
-      price: Number(price),
-      image: image || null,
-      stock: Number(stock) || 0,
-      isActive: isActive === 'on' || isActive === true,
-      featured: featured === 'on' || featured === true,
-    });
+
+    let imageUrl = image || null;
+    if (imageFile) {
+      imageUrl = await supabaseStorage.uploadFile({
+        buffer: imageFile.buffer,
+        mimetype: imageFile.mimetype,
+        originalname: imageFile.originalname,
+        folder: 'products',
+      });
+    }
+
+    try {
+      return await Product.create({
+        category,
+        name: name.trim(),
+        description: description || '',
+        price: Number(price),
+        image: imageUrl,
+        stock: Number(stock) || 0,
+        isActive: isActive === 'on' || isActive === true,
+        featured: featured === 'on' || featured === true,
+      });
+    } catch (error) {
+      if (imageFile) {
+        await supabaseStorage.deleteFile(imageUrl).catch(() => {});
+      }
+      throw error;
+    }
   },
 
-  async updateProduct(id, { category, name, description, price, image, stock, isActive, featured }) {
+  async updateProduct(id, { category, name, description, price, image, stock, isActive, featured }, imageFile) {
     const product = await this.getProductById(id);
     if (!category || !name || price === undefined || price === '') {
       throw new CatalogAdminError('Categoría, nombre y precio son obligatorios.');
@@ -63,21 +82,50 @@ const catalogService = {
     if (Number(price) < 0) {
       throw new CatalogAdminError('El precio no puede ser negativo.');
     }
-    product.category = category;
-    product.name = name.trim();
-    product.description = description || '';
-    product.price = Number(price);
-    if (typeof image === 'string' && image) product.image = image;
-    product.stock = Number(stock) || 0;
-    product.isActive = isActive === 'on' || isActive === true;
-    product.featured = featured === 'on' || featured === true;
-    await product.save();
+
+    const previousImage = product.image || null;
+    let imageUrl = product.image;
+    if (imageFile) {
+      imageUrl = await supabaseStorage.uploadFile({
+        buffer: imageFile.buffer,
+        mimetype: imageFile.mimetype,
+        originalname: imageFile.originalname,
+        folder: 'products',
+      });
+    } else if (typeof image === 'string' && image) {
+      imageUrl = image;
+    }
+
+    try {
+      product.category = category;
+      product.name = name.trim();
+      product.description = description || '';
+      product.price = Number(price);
+      product.image = imageUrl;
+      product.stock = Number(stock) || 0;
+      product.isActive = isActive === 'on' || isActive === true;
+      product.featured = featured === 'on' || featured === true;
+      await product.save();
+    } catch (error) {
+      if (imageFile) {
+        await supabaseStorage.deleteFile(imageUrl).catch(() => {});
+      }
+      throw error;
+    }
+
+    if (imageFile && previousImage && previousImage !== imageUrl) {
+      await supabaseStorage.deleteFile(previousImage).catch(() => {});
+    }
+
     return product;
   },
 
   async deleteProduct(id) {
-    await this.getProductById(id);
+    const product = await this.getProductById(id);
     await Product.deleteOne({ _id: id });
+    if (product.image) {
+      await supabaseStorage.deleteFile(product.image).catch(() => {});
+    }
   },
 
   async getAllCategories() {

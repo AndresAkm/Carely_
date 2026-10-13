@@ -37,9 +37,12 @@
                 <input id="id_stock" name="stock" type="number" min="0" class="form-control" value="<%= formData.stock || 0 %>">
             </div>
             <div class="dashboard-field field-image">
-                <label for="id_image">Imagen (URL)</label>
-                <input id="id_image" name="image" type="text" class="form-control" value="<%= formData.image || '' %>" placeholder="/images/producto.jpg">
-                <small>Ingresa una URL de imagen o deja vacío para usar el marcador de posición.</small>
+                <label for="id_image">Imagen del producto</label>
+                <div class="d-flex align-items-center gap-3">
+                    <img id="image-preview" src="<%= (formData.image || (product && product.image)) || '' %>" alt="Vista previa" class="dashboard-product-thumb <%= (formData.image || (product && product.image)) ? '' : 'd-none' %>" style="object-fit: cover;">
+                    <input id="id_image" name="image" type="file" class="form-control" accept="image/*">
+                </div>
+                <small>Sube una imagen (JPG, PNG, WEBP, AVIF, GIF o SVG, máx. 5 MB). Se almacena en Supabase Storage.</small>
             </div>
             <div class="dashboard-field form-check">
                 <input id="id_isActive" name="isActive" type="checkbox" class="form-check-input" <%= formData.isActive === false ? '' : 'checked' %>>
@@ -56,3 +59,22 @@
         </form>
     </div>
 </div>
+<script>
+    (function () {
+        var fileInput = document.getElementById('id_image');
+        var preview = document.getElementById('image-preview');
+        if (!fileInput) return;
+        fileInput.addEventListener('change', function () {
+            if (fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else if (!preview.getAttribute('src')) {
+                preview.classList.add('d-none');
+            }
+        });
+    })();
+</script>

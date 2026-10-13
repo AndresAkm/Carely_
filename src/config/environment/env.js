@@ -8,6 +8,12 @@ const env = {
   isDevelopment: (process.env.NODE_ENV || 'development') === 'development',
   isProduction: process.env.NODE_ENV === 'production',
   isTest: process.env.NODE_ENV === 'test',
+  supabase: {
+    url: (process.env.SUPABASE_URL || '').replace(/\/+$/, ''),
+    s3AccessKeyId: process.env.SUPABASE_S3_ACCESS_KEY_ID || '',
+    s3SecretAccessKey: process.env.SUPABASE_S3_SECRET_ACCESS_KEY || '',
+    storageBucket: process.env.SUPABASE_STORAGE_BUCKET || '',
+  },
 };
 
 export default env;

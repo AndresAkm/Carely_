@@ -2,6 +2,7 @@ import express from 'express';
 import { requireAdmin } from '../../../common/middleware/auth.js';
 import adminController from '../controllers/adminController.js';
 import asyncHandler from '../../../common/helpers/asyncHandler.js';
+import { uploadProductImage } from '../../../config/storage/index.js';
 
 const router = express.Router();
 
@@ -26,8 +27,8 @@ router.get('/productos', adminController.productList);
 router.get('/productos/nuevo', adminController.productForm);
 router.get('/productos/:id/editar', adminController.productForm);
 router.get('/productos/:id/eliminar', adminController.productConfirmDelete);
-router.post('/productos/nuevo', asyncHandler(adminController.productCreate));
-router.post('/productos/:id/editar', asyncHandler(adminController.productUpdate));
+router.post('/productos/nuevo', uploadProductImage, asyncHandler(adminController.productCreate));
+router.post('/productos/:id/editar', uploadProductImage, asyncHandler(adminController.productUpdate));
 router.post('/productos/:id/eliminar', asyncHandler(adminController.productDelete));
 
 // Categorías

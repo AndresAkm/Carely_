@@ -180,7 +180,8 @@ const adminController = {
 
   productCreate: asyncHandler(async (req, res) => {
     try {
-      await catalogService.createProduct(req.body);
+      if (req.uploadError) throw req.uploadError;
+      await catalogService.createProduct(req.body, req.file);
       req.session.flash = { type: 'success', message: 'Producto creado correctamente.' };
       return res.redirect('/dashboard/productos');
     } catch (error) {
@@ -191,7 +192,7 @@ const adminController = {
         product: null,
         categories,
         error: error.message,
-        formData: req.body,
+        formData: { ...req.body, image: null },
       });
     }
   }),
@@ -199,7 +200,8 @@ const adminController = {
   productUpdate: asyncHandler(async (req, res) => {
     const { id } = req.params;
     try {
-      await catalogService.updateProduct(id, req.body);
+      if (req.uploadError) throw req.uploadError;
+      await catalogService.updateProduct(id, req.body, req.file);
       req.session.flash = { type: 'success', message: 'Producto actualizado correctamente.' };
       return res.redirect('/dashboard/productos');
     } catch (error) {
