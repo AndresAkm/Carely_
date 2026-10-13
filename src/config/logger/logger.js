@@ -33,6 +33,9 @@ const redact = (value, seen = new WeakSet()) => {
   if (value instanceof Error) {
     return { name: value.name, message: value.message, stack: value.stack };
   }
+  if (typeof value.toHexString === 'function' && value._bsontype === 'ObjectId') {
+    return value.toHexString();
+  }
   if (Buffer.isBuffer(value)) return `[Buffer ${value.length} bytes]`;
   if (seen.has(value)) return '[Circular]';
   seen.add(value);
@@ -67,10 +70,23 @@ const normalizeArgs = (args) => {
 const logDir = path.resolve(process.cwd(), env.log.dir);
 fs.mkdirSync(logDir, { recursive: true });
 
-const jsonFormat = winston.format.combine(
+const ORDERED_KEYS = ['timestamp', 'level', 'service', 'channel', 'message'];
+
+const toSpacedJson = (obj) => JSON.stringify(obj, null, 1).replace(/\n\s*/g, ' ');
+
+const fileFormat = winston.format.combine(
   winston.format.timestamp(),
   winston.format.errors({ stack: true }),
-  winston.format.json()
+  winston.format.printf((info) => {
+    const ordered = {};
+    ORDERED_KEYS.forEach((key) => {
+      if (info[key] !== undefined) ordered[key] = info[key];
+    });
+    Object.keys(info).forEach((key) => {
+      if (!ORDERED_KEYS.includes(key)) ordered[key] = info[key];
+    });
+    return toSpacedJson(ordered);
+  })
 );
 
 const consoleFormat = winston.format.combine(
@@ -97,7 +113,7 @@ const appLogger = winston.createLogger({
       maxSize: '20m',
       maxFiles: '14d',
       zippedArchive: true,
-      format: jsonFormat,
+      format: fileFormat,
     }),
     new DailyRotateFile({
       dirname: logDir,
@@ -107,7 +123,7 @@ const appLogger = winston.createLogger({
       maxSize: '20m',
       maxFiles: '30d',
       zippedArchive: true,
-      format: jsonFormat,
+      format: fileFormat,
     }),
   ],
 });
@@ -123,7 +139,7 @@ const auditLogger = winston.createLogger({
       maxSize: '20m',
       maxFiles: '90d',
       zippedArchive: true,
-      format: jsonFormat,
+      format: fileFormat,
     }),
     ...(env.isDevelopment ? [consoleTransport] : []),
   ],
@@ -144,6 +160,7 @@ const logger = {
   http: (...args) => write(appLogger, 'http', args),
   audit: (...args) => write(auditLogger, 'info', args),
   redact,
+  toSpacedJson,
   logDir,
 };
 

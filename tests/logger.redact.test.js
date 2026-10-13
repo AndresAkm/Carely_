@@ -54,3 +54,29 @@ test('redact soporta objetos con toObject tipo mongoose', () => {
   assert.equal(out.password, '[REDACTED]');
   assert.equal(out.name, 'doc');
 });
+
+test('redact normaliza ObjectId a string hex', () => {
+  const objectId = {
+    _bsontype: 'ObjectId',
+    toHexString: () => '6512abcdef0123456789abcd',
+  };
+
+  const out = logger.redact({ id: objectId, nested: { ref: objectId } });
+
+  assert.equal(out.id, '6512abcdef0123456789abcd');
+  assert.equal(out.nested.ref, '6512abcdef0123456789abcd');
+});
+
+test('redact resume Buffer como texto', () => {
+  const out = logger.redact({ data: Buffer.from([1, 2, 3, 4]) });
+
+  assert.equal(out.data, '[Buffer 4 bytes]');
+});
+
+test('toSpacedJson produce una sola línea con espacios', () => {
+  const out = logger.toSpacedJson({ level: 'info', meta: { a: 1, b: 'x' } });
+
+  assert.equal(out.includes('\n'), false);
+  assert.equal(out, '{ "level": "info", "meta": { "a": 1, "b": "x" } }');
+});
+
