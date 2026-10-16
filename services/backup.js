@@ -9,8 +9,6 @@ const execAsync = promisify(exec);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const MONGODUMP = process.env.MONGODUMP_PATH || 'mongodump';
-
 const maskUri = (text = '') =>
   text.replace(/mongodb(\+srv)?:\/\/[^@\s"]*@/gi, 'mongodb$1://***:***@');
 
@@ -21,7 +19,7 @@ export const backupDatabase = async () => {
     fs.mkdirSync(outputPath, { recursive: true });
   }
 
-  const command = `"${MONGODUMP}" --uri "${process.env.MONGODB_URI}" --out "${outputPath}" --gzip`;
+  const command = `mongodump --uri "${process.env.MONGODB_URI}" --out "${outputPath}" --gzip`;
 
   try {
     const { stdout } = await execAsync(command);
