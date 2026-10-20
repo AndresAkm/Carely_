@@ -1,0 +1,20 @@
+config:
+  target: "http://localhost:9000"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      rampTo: 20
+      name: "Rampa de carga"
+
+scenarios:
+  - name: "Exploración pública"
+    flow:
+      - get:
+          url: "/"
+      - get:
+          url: "/catalogo"
+      - get:
+          url: "/auth/login"
+      - get:
+          url: "/auth/registro"
+      - think: 2

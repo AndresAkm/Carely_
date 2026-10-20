@@ -8,6 +8,7 @@ import { errorHandler } from '../../common/middleware/errorHandler.js';
 import { notFoundHandler } from '../../common/middleware/notFound.js';
 import { requestContext } from '../../common/middleware/requestContext.js';
 import env from '../environment/env.js';
+import morgan from 'morgan';
 
 const __dirname = getDirname(import.meta.url);
 
@@ -20,6 +21,7 @@ const createApp = () => {
   app.use(express.static(path.join(__dirname, '..', '..', 'public')));
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
+  app.use(morgan('dev'));
 
   app.use(
     session({

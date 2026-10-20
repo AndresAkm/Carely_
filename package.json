@@ -8,7 +8,9 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "test": "node --test",
-    "create-admin": "node src/scripts/create-admin.js"
+    "create-admin": "node src/scripts/create-admin.js",
+    "test:load": "artillery run loadtests/carely-load-test.yml",
+    "test:load:report": "artillery run -o loadtests/report.json loadtests/carely-load-test.yml"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1136.0",
@@ -26,6 +28,8 @@
     "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
+    "artillery": "^2.0.34",
+    "morgan": "^1.12.1",
     "nodemon": "^3.1.14"
   }
 }
