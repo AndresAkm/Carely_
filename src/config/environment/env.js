@@ -21,6 +21,14 @@ const env = {
     s3SecretAccessKey: process.env.SUPABASE_S3_SECRET_ACCESS_KEY || '',
     storageBucket: process.env.SUPABASE_STORAGE_BUCKET || '',
   },
+  mail: {
+    host: process.env.MAIL_HOST || '',
+    port: parseInt(process.env.MAIL_PORT, 10) || 587,
+    secure: process.env.MAIL_SECURE === 'true',
+    user: process.env.MAIL_USER || '',
+    pass: process.env.MAIL_PASS || '',
+    backupTo: process.env.MAIL_BACKUP_TO || '',
+  },
 };
 
 export default env;
